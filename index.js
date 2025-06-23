@@ -8,7 +8,7 @@ const path = require('path'); // <-- TAMBAHKAN INI
 // Impor rute yang sudah kita buat
 const productRoutes = require('./routes/product.routes');
 const authRoutes = require('./routes/auth.routes');
-const orderRoutes = require('./routes/orderRoutes'); // Asumsi nama file ini benar
+const orderRoutes = require('./routes/order.routes'); // Asumsi nama file ini benar
 const adminRoutes = require('./routes/admin.routes');
 const pelangganRoutes = require('./routes/pelanggan.routes');
 const recommendationRoutes = require('./routes/recommendation.routes');
