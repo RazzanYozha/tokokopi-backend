@@ -11,7 +11,6 @@ const authRoutes = require('./routes/auth.routes');
 const orderRoutes = require('./routes/order.routes'); // Asumsi nama file ini benar
 const adminRoutes = require('./routes/admin.routes');
 const pelangganRoutes = require('./routes/pelanggan.routes');
-const recommendationRoutes = require('./routes/recommendation.routes');
 
 
 const app = express();
@@ -34,8 +33,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/pelanggan', pelangganRoutes);
-app.use('/api/recommendations', recommendationRoutes);
-
 // --- BAGIAN BARU: CATCH-ALL ROUTE ---
 // Rute ini akan menangkap semua request yang bukan ke '/api'
 // dan mengembalikannya ke file index.html milik React.
