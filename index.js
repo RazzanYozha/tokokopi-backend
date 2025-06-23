@@ -38,6 +38,6 @@ app.get('*', (req, res) => {
 });
 // ------------------------------------
 
-app.listen(PORT, () => {
-    console.log(`Server berjalan di port http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server berjalan di port http://localhost:${port}`);
 });
