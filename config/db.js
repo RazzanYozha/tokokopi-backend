@@ -1,11 +1,11 @@
-// File: config/database.js (Versi final yang bisa untuk lokal & Railway)
+// File: config/db.js (Satu-satunya file konfigurasi database Anda)
 
-const mysql = require('mysql2/promise'); // Menggunakan /promise sesuai file lokal Anda
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 let pool;
 
-// Cek apakah variabel DATABASE_URL ada (ini hanya ada di Railway)
+// Cek apakah variabel DATABASE_URL ada (ini hanya akan ada di Railway)
 if (process.env.DATABASE_URL) {
     // Lingkungan Production (Railway)
     console.log("Connecting to Railway database...");
@@ -14,21 +14,21 @@ if (process.env.DATABASE_URL) {
     // Lingkungan Development (Lokal/XAMPP)
     console.log("Connecting to local XAMPP database...");
     pool = mysql.createPool({
-        host: 'localhost',   // Alamat server database lokal Anda
-        user: 'root',        // User default XAMPP
-        password: '',          // Ganti jika password XAMPP Anda berbeda
-        database: 'db_tokokopi'  // Nama database lokal Anda
+        host: 'localhost',
+        user: 'root',
+        password: '', // Sesuaikan jika password XAMPP Anda berbeda
+        database: 'db_tokokopi'
     });
 }
 
-// Cek koneksi (opsional tapi bagus untuk debugging)
+// Opsional: Cek koneksi untuk debugging saat aplikasi start
 pool.getConnection()
     .then(connection => {
-        console.log('Database connection successful!');
+        console.log('Database connection pool created successfully!');
         connection.release();
     })
     .catch(err => {
-        console.error('Error connecting to database:', err);
+        console.error('Failed to create database connection pool:', err);
     });
 
 module.exports = pool;
