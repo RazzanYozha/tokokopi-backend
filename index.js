@@ -6,9 +6,13 @@ const cors = require('cors');
 const path = require('path'); // <-- TAMBAHKAN INI
 
 // Impor rute yang sudah kita buat
-const authRoutes = require('./routes/auth.routes'); 
+const productRoutes = require('./routes/product.routes');
+const authRoutes = require('./routes/auth.routes');
+const orderRoutes = require('./routes/orderRoutes'); // Asumsi nama file ini benar
+const adminRoutes = require('./routes/admin.routes');
 const pelangganRoutes = require('./routes/pelanggan.routes');
-const adminRoutes = require('./routes/admin.routes.js');
+const recommendationRoutes = require('./routes/recommendation.routes');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,9 +29,12 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // Menggunakan Rute API
 // Semua rute API kita letakkan di bawah prefix '/api' agar tidak bentrok
-app.use('/api/auth', authRoutes); 
-app.use('/api/pelanggan', pelangganRoutes);
+app.use('/api/products', productRoutes); 
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/pelanggan', pelangganRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 // --- BAGIAN BARU: CATCH-ALL ROUTE ---
 // Rute ini akan menangkap semua request yang bukan ke '/api'
