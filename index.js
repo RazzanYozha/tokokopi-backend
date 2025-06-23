@@ -1,57 +1,34 @@
-// File: index.js (Versi Diagnostik)
-
+// File: index.js (Versi Final)
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-// Kita tetap butuh koneksi DB untuk tes query langsung
-const db = require('./config/db'); 
+// --- SEMUA REQUIRE SUDAH DISERAGAMKAN ---
+const productRoutes = require('./routes/product.routes');
+const authRoutes = require('./routes/auth.routes');
+const orderRoutes = require('./routes/order.routes');
+const adminRoutes = require('./routes/admin.routes');
+const pelangganRoutes = require('./routes/pelanggan.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// --- SEMUA ROUTE SUDAH DISERAGAMKAN ---
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/pelanggan', pelangganRoutes);
 
-// =======================================================
-// MULAI RUTE DIAGNOSTIK
-// =======================================================
-
-// Tes 1: Rute paling dasar
+// Rute dasar untuk health check
 app.get('/', (req, res) => {
-    res.status(200).json({ 
-        status: 'success',
-        message: 'Server is running and responding from index.js!' 
-    });
+  res.status(200).send('Tokokopi API is running!');
 });
-
-// Tes 2: Rute produk yang dibuat langsung di sini
-app.get('/api/products', async (req, res) => {
-    try {
-        const query = "SELECT * FROM products";
-        const [results] = await db.query(query);
-        res.status(200).json({
-            message: "SUCCESS: Products fetched directly from index.js!",
-            count: results.length,
-            data: results
-        });
-    } catch (error) {
-        // Jika ini gagal, masalahnya ada di koneksi/query database
-        res.status(500).json({
-            message: "FAILED: Database query from index.js failed!",
-            error: error.message
-        });
-    }
-});
-
-
-// =======================================================
-// AKHIR RUTE DIAGNOSTIK
-// (Semua rute lama kita abaikan sementara)
-// =======================================================
-
 
 app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+    console.log(`Server berjalan di http://localhost:${port}`);
 });
