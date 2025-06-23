@@ -1,47 +1,57 @@
-// File: backend/index.js (Versi Gabungan)
+// File: index.js (Versi Diagnostik)
 
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path'); // <-- TAMBAHKAN INI
+require('dotenv').config();
 
-// Impor rute yang sudah kita buat
-const productRoutes = require('./routes/product.routes');
-const authRoutes = require('./routes/auth.routes');
-const orderRoutes = require('./routes/order.routes'); // Asumsi nama file ini benar
-const adminRoutes = require('./routes/admin.routes');
-const pelangganRoutes = require('./routes/pelanggan.routes');
-
+// Kita tetap butuh koneksi DB untuk tes query langsung
+const db = require('./config/db'); 
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- BAGIAN BARU UNTUK MENYAJIKAN FRONTEND ---
-// Memberi tahu Express untuk menyajikan file-file statis (hasil build React)
-// dari folder 'build' yang akan kita buat nanti.
-app.use(express.static(path.join(__dirname, 'build')));
-// ---------------------------------------------
 
-// Menggunakan Rute API
-// Semua rute API kita letakkan di bawah prefix '/api' agar tidak bentrok
-app.use('/api/products', productRoutes); 
-app.use('/api/auth', authRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/pelanggan', pelangganRoutes);
-// --- BAGIAN BARU: CATCH-ALL ROUTE ---
-// Rute ini akan menangkap semua request yang bukan ke '/api'
-// dan mengembalikannya ke file index.html milik React.
-// Ini penting agar routing di sisi frontend (React Router) bisa bekerja.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// =======================================================
+// MULAI RUTE DIAGNOSTIK
+// =======================================================
+
+// Tes 1: Rute paling dasar
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        status: 'success',
+        message: 'Server is running and responding from index.js!' 
+    });
 });
-// ------------------------------------
+
+// Tes 2: Rute produk yang dibuat langsung di sini
+app.get('/api/products', async (req, res) => {
+    try {
+        const query = "SELECT * FROM products";
+        const [results] = await db.query(query);
+        res.status(200).json({
+            message: "SUCCESS: Products fetched directly from index.js!",
+            count: results.length,
+            data: results
+        });
+    } catch (error) {
+        // Jika ini gagal, masalahnya ada di koneksi/query database
+        res.status(500).json({
+            message: "FAILED: Database query from index.js failed!",
+            error: error.message
+        });
+    }
+});
+
+
+// =======================================================
+// AKHIR RUTE DIAGNOSTIK
+// (Semua rute lama kita abaikan sementara)
+// =======================================================
+
 
 app.listen(port, () => {
-    console.log(`Server berjalan di port http://localhost:${port}`);
+    console.log(`Server is listening on port ${port}`);
 });
