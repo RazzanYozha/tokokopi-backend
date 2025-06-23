@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../config/db');
 
 // Mengambil semua produk
 const getAllProducts = (req, res) => {
